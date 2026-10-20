@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 9rem; }
+  body { @apply bg-white font-sans text-slate-700 antialiased; padding-bottom: 3.25rem; }
+  h1, h2, h3, h4 { @apply font-display text-pine-900; letter-spacing: -0.02em; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-lake-600; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .animate-marquee, .animate-pop { animation: none !important; }
+  }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-accent { @apply btn bg-coral-500 text-pine-950 hover:bg-coral-400; }
+  .btn-ink { @apply btn bg-pine-900 text-white hover:bg-pine-700; }
+  .btn-outline { @apply btn border border-slate-300 bg-white text-pine-900 hover:border-pine-900; }
+  .field { @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-pine-900 placeholder:text-slate-400 focus:border-lake-600 focus:bg-white focus:outline-none; }
+  .field-error { @apply mt-1 text-xs text-red-600; }
+}
