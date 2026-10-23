@@ -4,20 +4,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        pine: { 950: '#04211f', 900: '#0a3431', 800: '#104742', 700: '#1a5e57', 100: '#dcebe8' },
-        lake: { 50: '#eaf3fb', 100: '#cfe3f5', 600: '#2b6cb0', 700: '#235a93', 800: '#1c4876' },
-        coral: { 50: '#fff1ec', 100: '#ffdfd3', 400: '#ff8a6b', 500: '#f2653f', 600: '#d44a26' },
-        cream: '#f7f5ef',
+        // Deep navy used for headings, buttons, hero cards and the footer.
+        navy: {
+          50: '#f4f7fc', 100: '#e6ecf7', 200: '#c9d5ec', 300: '#9fb2d9',
+          500: '#2a56a8', 600: '#1b4290', 700: '#12337a', 800: '#0f2b69',
+          900: '#0b2058', 950: '#08173f', ink: '#0e1b4d',
+        },
+        // Medical green used for accents, the CTA band and highlighted words.
+        leaf: { 50: '#e9f6ee', 100: '#d3eddd', 300: '#7fd6a2', 400: '#3fbf73', 500: '#1fa75a', 600: '#15924d', 700: '#0f7a40' },
+        mist: '#f3f6fb',
       },
       fontFamily: {
-        display: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       keyframes: {
-        marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-        pop: { '0%': { opacity: 0, transform: 'translateY(12px) scale(.98)' }, '100%': { opacity: 1, transform: 'none' } },
+        pop: { '0%': { opacity: 0, transform: 'translateY(10px) scale(.985)' }, '100%': { opacity: 1, transform: 'none' } },
       },
-      animation: { marquee: 'marquee 60s linear infinite', pop: 'pop .22s ease-out' },
+      animation: { pop: 'pop .2s ease-out' },
     },
   },
   plugins: [],

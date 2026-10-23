@@ -28,4 +28,5 @@ export const api = {
   listApplications: (params) => request(`/admin/applications?${new URLSearchParams(params)}`),
   updateApplication: (id, patch) => request(`/admin/applications/${id}`, { method: 'PATCH', body: patch }),
   deleteApplication: (id) => request(`/admin/applications/${id}`, { method: 'DELETE' }),
+  exportUrl: (params) => `/api/admin/applications/export?${new URLSearchParams(params)}`,
 };

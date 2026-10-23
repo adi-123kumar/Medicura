@@ -1,58 +1,76 @@
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Logo from './Logo';
 import { site } from '../../config/site';
-import { CATEGORIES } from '../../config/categories';
-import { groupCounts } from '../../utils/colleges';
-import { useGuidance } from '../../features/guidance/GuidanceContext';
 
+const col = 'text-[15px] text-navy-200 transition hover:text-white';
+
+/** Green call-to-action band + footer. Shared by every public page through MainLayout. */
 export default function Footer() {
-  const { openGuidance } = useGuidance();
-  const india = CATEGORIES['mbbs-india'];
-  const states = groupCounts(india.colleges).slice(0, 6);
-  const link = 'text-sm text-pine-100 hover:text-white';
-
   return (
-    <footer className="mt-20 bg-pine-900 text-pine-100">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <Logo light />
-          <p className="mt-4 max-w-xs text-sm">Expert counselling for MBBS and MD/MS admissions in India and abroad: college shortlisting, admission process and documentation.</p>
-          <button onClick={() => openGuidance()} className="btn-accent mt-5">Get free counselling</button>
+    <>
+      <section className="bg-leaf-600 text-white">
+        <div className="container-page flex flex-col items-start justify-between gap-8 py-14 md:flex-row md:items-center">
+          <div>
+            <p className="text-[12px] font-bold uppercase tracking-[0.17em] text-white/80">Your next step starts here</p>
+            <h2 className="mt-3 max-w-[640px] text-[clamp(1.8rem,3.4vw,2.6rem)] font-bold leading-[1.1] text-white">Make your medical career plan with clarity.</h2>
+          </div>
+          <Link to="/contact#inquiry" className="btn-white shrink-0 !h-[60px] px-9 text-base">Get free counselling <ArrowUpRight size={17} /></Link>
         </div>
-        <div>
-          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">Useful links</h3>
-          <ul className="space-y-2.5">
-            <li><Link className={link} to="/">Home</Link></li>
-            <li><Link className={link} to="/about">About us</Link></li>
-            <li><Link className={link} to="/contact">Contact us</Link></li>
-            <li><Link className={link} to={CATEGORIES['mbbs-abroad'].path}>MBBS abroad</Link></li>
-            <li><Link className={link} to={CATEGORIES['md-ms'].path}>MD / MS</Link></li>
-          </ul>
+      </section>
+
+      <footer className="bg-navy-800 text-navy-200">
+        <div className="container-page grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          <div>
+            <Logo light />
+            <p className="mt-6 max-w-[320px] text-[15px] leading-relaxed">Supportive guidance for students exploring medical education in India and abroad.</p>
+            <span className="mt-6 inline-block rounded-full border border-leaf-400/50 px-4 py-2 text-[13px] font-medium text-leaf-300">A clearer path to medicine</span>
+          </div>
+          <div>
+            <h3 className="mb-5 text-base font-bold text-white">Explore</h3>
+            <ul className="space-y-3.5">
+              <li><Link className={col} to="/about">About us</Link></li>
+              <li><Link className={col} to="/colleges/mbbs-india">MBBS colleges</Link></li>
+              <li><Link className={col} to="/neet-predictor">NEET predictor</Link></li>
+              <li><Link className={col} to="/insights">Insights &amp; articles</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="mb-5 text-base font-bold text-white">Study pathways</h3>
+            <ul className="space-y-3.5">
+              <li><Link className={col} to="/colleges/mbbs-india">MBBS in India</Link></li>
+              <li><Link className={col} to="/colleges/mbbs-abroad">MBBS abroad</Link></li>
+              <li><Link className={col} to="/colleges/md-ms">MD / MS guidance</Link></li>
+              <li><Link className={col} to="/contact#inquiry">Talk to a counselor</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="mb-5 text-base font-bold text-white">Get in touch</h3>
+            <ul className="space-y-3.5">
+              <li><a className={col} href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+              <li><Link className={col} to="/contact">Contact page</Link></li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">MBBS in India</h3>
-          <ul className="space-y-2.5">
-            {states.map((s) => (
-              <li key={s.name}><Link className={link} to={`${india.path}?group=${encodeURIComponent(s.name)}`}>MBBS in {s.name}</Link></li>
-            ))}
-          </ul>
+
+        <div className="border-t border-white/10">
+          <div className="container-page space-y-3 py-6">
+            <p className="text-[11px] text-sky-300">{site.disclaimer}</p>
+            <p className="text-[13px] text-navy-300">{site.sampleNote}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">Contact</h3>
-          <ul className="space-y-3 text-sm">
-            <li className="flex gap-2.5"><MapPin size={16} className="mt-0.5 shrink-0 text-coral-400" /> {site.address}</li>
-            <li className="flex gap-2.5"><Phone size={16} className="mt-0.5 shrink-0 text-coral-400" /> <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
-            <li className="flex gap-2.5"><Mail size={16} className="mt-0.5 shrink-0 text-coral-400" /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
-          </ul>
+        <div className="bg-navy-900">
+          <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-[11px] text-navy-300 sm:flex-row">
+            <p>© {new Date().getFullYear()} {site.name}</p>
+            <nav className="flex gap-6" aria-label="Legal">
+              <Link to="/privacy" className="hover:text-white">Privacy</Link>
+              <Link to="/terms" className="hover:text-white">Terms</Link>
+              <Link to="/sitemap" className="hover:text-white">Site map</Link>
+            </nav>
+            <p className="text-sky-300">Designed for future doctors</p>
+          </div>
         </div>
-      </div>
-      <div className="border-t border-white/10">
-        <div className="container-page space-y-2 py-6 text-xs text-pine-100/80">
-          <p><b className="text-white">Disclaimer:</b> {site.disclaimer}</p>
-          <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }

@@ -2,7 +2,9 @@ import { CATEGORIES } from '../config/categories';
 
 export const slugify = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-export const collegeUrl = (college) => `/colleges/${college.category}/${college.slug}`;
+// MBBS India profiles live at /colleges/<slug>; the other categories keep their category in the URL.
+export const collegeUrl = (college) =>
+  college.category === 'mbbs-india' ? `/colleges/${college.slug}` : `/colleges/${college.category}/${college.slug}`;
 
 export const findCollege = (categoryKey, slug) =>
   CATEGORIES[categoryKey]?.colleges.find((c) => c.slug === slug) || null;
@@ -18,14 +20,14 @@ export const sumSeats = (colleges) => colleges.reduce((n, c) => n + (c.seats || 
 
 export const formatNumber = (n) => new Intl.NumberFormat('en-IN').format(n);
 
-export function categoryStats(category) {
-  const list = category.colleges;
-  return {
-    groups: { value: groupCounts(list).length, label: category.groupLabel === 'States' ? 'States covered' : 'Countries covered' },
-    colleges: { value: list.length, label: 'Colleges listed' },
-    seats: { value: sumSeats(list), label: 'Seats listed' },
-    government: { value: list.filter((c) => c.type === 'Government').length, label: 'Government colleges' },
-  };
+/** Link to the contact form, optionally pre-filled for a college or a course. */
+export function contactUrl({ college, interest } = {}) {
+  const p = new URLSearchParams();
+  if (college) {
+    p.set('college', college.slug);
+    p.set('category', college.category);
+  }
+  if (interest) p.set('interest', interest);
+  const qs = p.toString();
+  return `/contact${qs ? `?${qs}` : ''}#inquiry`;
 }
-
-export const waLink = (number, text) => `https://wa.me/${number}${text ? `?text=${encodeURIComponent(text)}` : ''}`;

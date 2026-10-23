@@ -1,15 +1,19 @@
 import { Link } from 'react-router-dom';
 import { site } from '../../config/site';
 
+/** Two-tone wordmark: "MediCura" + green "World", with the circular logo. */
 export default function Logo({ light = false }) {
   return (
-    <Link to="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-pine-900">
-        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="#ff8a6b"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" /></svg>
-      </span>
-      <span className="leading-tight">
-        <span className={`block font-display text-lg font-extrabold ${light ? 'text-white' : 'text-pine-900'}`}>{site.name}</span>
-        <span className={`block text-[10px] font-semibold uppercase tracking-[0.18em] ${light ? 'text-pine-100' : 'text-slate-500'}`}>{site.tagline}</span>
+    <Link to="/" className="flex items-center gap-3.5" aria-label={`${site.name} home`}>
+      <img src="/logo.png" alt="" width="50" height="50" className="h-[50px] w-[50px] shrink-0 rounded-full shadow-[0_6px_16px_-6px_rgba(18,51,122,0.5)]" />
+      <span className="leading-none">
+        <span className="block font-display text-[27px] font-extrabold tracking-[-0.045em]">
+          <span className={light ? 'text-white' : 'text-navy-700'}>MediCura</span>{' '}
+          <span className={light ? 'text-leaf-400' : 'text-leaf-600'}>World</span>
+        </span>
+        <span className={`mt-1.5 block text-[10px] font-semibold uppercase tracking-[0.22em] ${light ? 'text-navy-200' : 'text-slate-500'}`}>
+          {site.tagline}
+        </span>
       </span>
     </Link>
   );

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { validate } from '../middleware/validate.js';
 import { requireAdmin } from '../middleware/auth.js';
 import { applicationLimiter, loginLimiter } from '../middleware/rateLimiters.js';
-import { createApplicationSchema, loginSchema, updateApplicationSchema, listQuerySchema } from '../validators/applicationSchemas.js';
+import { createApplicationSchema, loginSchema, updateApplicationSchema, listQuerySchema, exportQuerySchema } from '../validators/applicationSchemas.js';
 import * as auth from '../controllers/authController.js';
 import * as apps from '../controllers/applicationController.js';
 
@@ -20,6 +20,7 @@ router.get('/auth/me', requireAdmin, auth.me);
 
 // Admin: applications
 router.get('/admin/applications/stats', requireAdmin, apps.applicationStats);
+router.get('/admin/applications/export', requireAdmin, validate(exportQuerySchema, 'query'), apps.exportApplications);
 router.get('/admin/applications', requireAdmin, validate(listQuerySchema, 'query'), apps.listApplications);
 router.patch('/admin/applications/:id', requireAdmin, validate(updateApplicationSchema), apps.updateApplication);
 router.delete('/admin/applications/:id', requireAdmin, apps.deleteApplication);

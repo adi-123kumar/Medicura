@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { ArrowUpRight, Lock } from 'lucide-react';
 import { useAuth } from './AuthContext';
 import Logo from '../../components/layout/Logo';
 
@@ -29,18 +29,17 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="grid min-h-screen place-items-center bg-cream px-4">
-      <form onSubmit={onSubmit} className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+    <div className="grid min-h-screen place-items-center bg-mist px-4">
+      <form onSubmit={onSubmit} className="w-full max-w-md border border-navy-100 bg-white p-9 shadow-[0_30px_60px_-40px_rgba(11,32,88,0.5)]">
         <Logo />
-        <h1 className="mt-6 flex items-center gap-2 text-2xl font-extrabold"><Lock size={20} /> Admin sign in</h1>
-        <label className="mt-6 block text-xs font-semibold text-pine-900">Email
-          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="field mt-1" autoComplete="username" />
-        </label>
-        <label className="mt-4 block text-xs font-semibold text-pine-900">Password
-          <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="field mt-1" autoComplete="current-password" />
-        </label>
-        {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">{error}</p>}
-        <button disabled={busy} className="btn-ink mt-6 w-full">{busy ? 'Signing in…' : 'Sign in'}</button>
+        <h1 className="mt-8 flex items-center gap-2.5 text-[28px] font-bold"><Lock size={22} className="text-leaf-600" /> Admin sign in</h1>
+        <p className="mt-2 text-sm text-slate-500">Review and follow up on website inquiries.</p>
+        <label className="field-label mt-7" htmlFor="a-email">Email</label>
+        <input id="a-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="field" autoComplete="username" />
+        <label className="field-label mt-5" htmlFor="a-pass">Password</label>
+        <input id="a-pass" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="field" autoComplete="current-password" />
+        {error && <p className="mt-4 rounded-md bg-red-50 p-3 text-sm font-medium text-red-700" role="alert">{error}</p>}
+        <button disabled={busy} className="btn-primary mt-7 w-full">{busy ? 'Signing in…' : <>Sign in <ArrowUpRight size={16} /></>}</button>
       </form>
     </div>
   );

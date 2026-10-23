@@ -19,4 +19,35 @@ fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 export const db = new DatabaseSync(dbPath);
 db.exec('PRAGMA journal_mode = WAL;');
 db.exec('PRAGMA foreign_keys = ON;');
-db.exec(fs.readFileSync(path.join(here, 'schema.sql'), 'utf8'));
+
+const schema = fs.readFileSync(path.join(here, 'schema.sql'), 'utf8');
+
+/*
+ * One-time upgrade for databases created before the "verified" status existed
+ * (old statuses: new / contacted / accepted / rejected, phone was required).
+ * Existing rows are kept; "accepted" becomes "verified".
+ */
+const current = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'applications'").get();
+if (current && !current.sql.includes("'verified'")) {
+  db.exec('BEGIN');
+  try {
+    db.exec('ALTER TABLE applications RENAME TO applications_old');
+    db.exec('DROP INDEX IF EXISTS idx_applications_status');
+    db.exec('DROP INDEX IF EXISTS idx_applications_created');
+    db.exec(schema);
+    db.exec(`INSERT INTO applications
+      (id, full_name, email, phone, course, neet_score, college_slug, college_name, college_category,
+       message, status, admin_notes, created_at, updated_at)
+      SELECT id, full_name, email, phone, course, neet_score, college_slug, college_name, college_category,
+       message, CASE status WHEN 'accepted' THEN 'verified' ELSE status END, admin_notes, created_at, updated_at
+      FROM applications_old`);
+    db.exec('DROP TABLE applications_old');
+    db.exec('COMMIT');
+    console.log('Database upgraded: applications table migrated.');
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+} else {
+  db.exec(schema);
+}

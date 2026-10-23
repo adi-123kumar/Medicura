@@ -9,12 +9,12 @@ export default function QuickFacts({ college }) {
     isAbroad && college.medium && { label: 'Medium', value: college.medium },
   ].filter(Boolean);
   return (
-    <div className="container-page -mt-8">
-      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="border-b border-navy-100 bg-white">
+      <dl className="container-page grid grid-cols-2 divide-slate-200 py-2 lg:grid-cols-4 lg:divide-x">
         {facts.slice(0, 4).map((f) => (
-          <div key={f.label} className="rounded-2xl border border-slate-100 bg-white p-5 text-center shadow-sm">
+          <div key={f.label} className="px-4 py-4 text-center">
             <dt className="text-[11px] font-bold uppercase tracking-widest text-slate-500">{f.label}</dt>
-            <dd className="mt-1 font-display text-lg font-extrabold text-pine-900">{f.value}</dd>
+            <dd className="mt-1 font-display text-lg font-extrabold text-navy-ink">{f.value}</dd>
           </div>
         ))}
       </dl>

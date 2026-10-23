@@ -1,51 +1,53 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Stethoscope } from 'lucide-react';
-import { CATEGORIES } from '../../config/categories';
-import { ALL_COLLEGES } from '../../data';
-import { formatNumber } from '../../utils/colleges';
-import { useGuidance } from '../../features/guidance/GuidanceContext';
+import { ArrowUpRight } from 'lucide-react';
+import Eyebrow from '../common/Eyebrow';
+import HeroArt from './HeroArt';
 
 export default function Hero() {
-  const { openGuidance } = useGuidance();
-  const india = CATEGORIES['mbbs-india'].colleges.length;
-  const abroad = CATEGORIES['mbbs-abroad'].colleges.length;
+  const [photoFailed, setPhotoFailed] = useState(false);
   return (
-    <section className="relative overflow-hidden bg-pine-900 text-white">
-      <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-lake-600/30 blur-3xl" aria-hidden="true" />
-      <div className="container-page relative grid items-center gap-10 py-16 lg:grid-cols-[1.2fr_1fr] lg:py-24">
+    <section className="relative overflow-hidden bg-gradient-to-br from-mist via-white to-leaf-50/70">
+      <div className="pointer-events-none absolute -left-44 top-24 h-[560px] w-[560px] rounded-full bg-navy-100/40" aria-hidden="true" />
+      <div className="container-page relative grid items-center gap-14 pb-16 pt-14 lg:grid-cols-[1.02fr_1fr] lg:pt-[72px]">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-coral-400">
-            <Stethoscope size={16} /> MBBS and MD/MS admission guidance
-          </p>
-          <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl">
-            Find the right medical college, in India or abroad.
+          <Eyebrow>MBBS admissions · India &amp; abroad</Eyebrow>
+          <h1 className="mt-7 text-[clamp(2.8rem,6vw,4.6rem)] font-bold leading-[1.02] tracking-[-0.05em]">
+            Find your way to <span className="text-leaf-600">a future in medicine.</span>
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-pine-100">
-            Compare {formatNumber(ALL_COLLEGES.length)} colleges by fees, seats, recognition and admission route, then talk to a counsellor who helps with every step.
+          <p className="mt-8 max-w-[520px] text-lg leading-[1.8] text-slate-500">
+            Explore medical education pathways, compare college options, and get guidance for your next admission step.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <button onClick={() => openGuidance()} className="btn-accent px-7 py-3.5 text-base">Get free counselling</button>
-            <Link to={CATEGORIES['mbbs-india'].path} className="btn border border-white/30 px-7 py-3.5 text-base text-white hover:bg-white/10">
-              Explore colleges <ArrowRight size={16} />
-            </Link>
+          <div className="mt-9 flex flex-wrap gap-4">
+            <Link to="/contact#inquiry" className="btn-primary">Talk to an expert <ArrowUpRight size={16} /></Link>
+            <Link to="/colleges/mbbs-india" className="btn-outline">Explore colleges <ArrowUpRight size={16} /></Link>
+          </div>
+          <div className="mt-12 flex items-center gap-4">
+            <span className="grid h-[50px] w-[50px] place-items-center rounded-full border border-leaf-500/40 bg-white text-xl font-medium text-leaf-600">M</span>
+            <p className="leading-snug"><b className="block text-[15px] font-semibold text-navy-700">One step at a time.</b><span className="text-sm text-slate-500">Guidance built around your goals.</span></p>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-          <p className="text-xs font-bold uppercase tracking-widest text-coral-400">Browse by pathway</p>
-          <div className="mt-4 space-y-3">
-            {[
-              ['mbbs-india', `${india} colleges across India`],
-              ['mbbs-abroad', `${abroad} universities overseas`],
-              ['md-ms', 'Postgraduate programmes'],
-            ].map(([key, text]) => (
-              <Link key={key} to={CATEGORIES[key].path} className="flex items-center justify-between rounded-2xl bg-white/10 px-5 py-4 transition hover:bg-white/20">
-                <span><b className="block text-white">{CATEGORIES[key].navLabel}</b><span className="text-sm text-pine-100">{text}</span></span>
-                <ArrowRight size={18} className="text-coral-400" />
-              </Link>
-            ))}
-          </div>
-          <p className="mt-5 flex items-center gap-2 text-xs text-pine-100"><ShieldCheck size={15} className="text-coral-400" /> We never collect fees on behalf of colleges.</p>
+
+        <div className="relative mx-auto aspect-[6/7] w-full max-w-[600px] overflow-hidden rounded-[32px] bg-navy-100 shadow-[0_40px_80px_-40px_rgba(11,32,88,0.55)]">
+          {photoFailed ? (
+            <HeroArt />
+          ) : (
+            <img src="/hero.jpg" alt="Student looking toward a medical college campus" className="h-full w-full object-cover" onError={() => setPhotoFailed(true)} />
+          )}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-900/90 to-transparent" aria-hidden="true" />
+          <Link to="/contact#inquiry" className="group absolute bottom-24 left-6 w-[250px] rounded-sm bg-navy-800 p-6 text-white shadow-xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-leaf-300">Your journey</p>
+            <p className="mt-3 pr-6 text-[19px] font-bold leading-snug text-white">Starts with a clear next step.</p>
+            <ArrowUpRight size={17} className="absolute bottom-5 right-5 text-leaf-300 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+          <p className="absolute bottom-6 left-6 flex items-center gap-2.5 text-sm font-semibold text-white"><span className="h-2.5 w-2.5 rounded-full bg-leaf-400" /> Every future doctor starts somewhere.</p>
         </div>
+      </div>
+
+      <div className="container-page relative flex items-center gap-5 pb-9 text-[12px] font-bold uppercase tracking-[0.17em] text-slate-500">
+        <span>Guidance for aspiring doctors</span>
+        <span className="h-px w-11 bg-navy-600" aria-hidden="true" />
+        <span>India · Abroad · Postgraduate</span>
       </div>
     </section>
   );

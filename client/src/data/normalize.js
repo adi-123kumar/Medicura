@@ -1,3 +1,5 @@
+import { resolveState } from './cityState';
+
 /*
  * Turns raw records (india.js / abroad.js / mdms.js) into a clean, consistent shape
  * for the UI. Raw files stay untouched, so you can keep pasting new data in.
@@ -14,6 +16,9 @@ export const tidyText = (value) =>
   typeof value === 'string'
     ? value
         .replace(/The (?:our college|Future Mind Educare)[^.]*?(?:summary|directory)/gi, 'Our information')
+        .replace(/\bdirectory[- ]listed\b/gi, 'listed')
+        .replace(/\b(?:the )?(?:MD\/MS |MBBS )?directory\b/gi, 'our listing')
+        .replace(/(?:a |the )?(?:feature\/)?ranking label of (?:not (?:stated|listed)[^.]*|none)/gi, 'no ranking label')
         .replace(/\bour college (?:information summary|directory)/gi, 'our information')
         .replace(/Future Mind Educare/gi, 'our directory')
         .replace(/Not stated in the collected information/gi, 'not stated')
@@ -31,6 +36,7 @@ export function normalizeType(raw) {
   const t = String(clean(raw) || '').toUpperCase();
   if (t.includes('GOVERNMENT') || t === 'GOVT') return 'Government';
   if (t.includes('DEEMED')) return 'Deemed';
+  if (t.startsWith('PRIVATE')) return 'Private';
   if (t.includes('TRUST')) return 'Trust';
   if (t.includes('SOCIETY')) return 'Society';
   if (t.includes('PRIVATE')) return 'Private';
@@ -46,7 +52,10 @@ const orNull = (v) => (isMissing(v) ? null : tidyText(clean(v)));
 const yearLabel = (v) => (String(v || '').match(/\d{4}\s*[–-]\s*\d{2,4}/) || [''])[0];
 
 export function normalizeCollege(raw, category) {
-  const group = clean(raw.country || raw.state) || 'Other';
+  const cleanedState = raw.state && !isMissing(clean(raw.state)) ? clean(raw.state) : null;
+  const state = cleanedState || (raw.country ? null : resolveState(raw.city));
+  const country = raw.country ? clean(raw.country) : null;
+  const group = country || state || 'Other states';
   const recognition = clean(raw.recognition || '');
   return {
     id: `${category}:${raw.slug}`,
@@ -56,19 +65,20 @@ export function normalizeCollege(raw, category) {
     name: raw.name,
     shortName: raw.shortName || raw.name,
     city: clean(raw.city || ''),
-    state: raw.state ? clean(raw.state) : null,
-    country: raw.country ? clean(raw.country) : null,
+    state,
+    country,
     group, // state for India listings, country for abroad
     type: normalizeType(raw.type),
     seats: toSeats(raw.seats),
     ranking: orNull(raw.ranking),
-    recognition,
-    isNmc: /NMC|MCI/i.test(recognition),
+    recognition: recognition || (/\bNMC\b/.test(raw.about || '') ? 'NMC' : ''),
+    isNmc: /NMC|MCI/i.test(recognition || raw.about || ''),
     isWho: /WHO/i.test(recognition),
     medium: orNull(raw.medium),
     duration: orNull(raw.duration),
     feature: orNull(raw.directoryFeature),
-    image: raw.image || null,
+    image: /^(https?:)?\/\//i.test(raw.imageUrl || raw.image || '') || String(raw.imageUrl || raw.image || '').startsWith('/') ? raw.imageUrl || raw.image : null,
+    imageAlt: raw.imageAlt || raw.name,
     fees: {
       tuition: orNull(raw.annualTuition) || 'Contact us for fee details',
       total: orNull(raw.annualTotal || raw.approximateAnnualTotal),
